@@ -83,8 +83,7 @@ else:
 df_diario = df_filtrado.groupby('Data')['Precipitacao'].sum().reset_index()
 df_diario['Data'] = pd.to_datetime(df_diario['Data'])
 janela_media = 7 if len(df_diario) >= 7 else max(1, len(df_diario))
-df_diario['MediaMovel'] = df_diario['Precipitação'].rolling(window=janela_media, min_periods=1).mean()
-
+df_diario['MediaMovel'] = df_diario['Precipitacao'].rolling(window=janela_media, min_periods=1).mean()
 total_chuva = df_filtrado['Precipitação'].sum()
 dias_totais = len(df_diario)
 dias_com_chuva = len(df_diario[df_diario['Precipitação'] > 0])
