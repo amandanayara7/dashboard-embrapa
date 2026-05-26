@@ -90,7 +90,7 @@ dias_com_chuva = len(df_diario[df_diario['Precipitacao'] > 0])
 dias_secos = dias_totais - dias_com_chuva
 media_diaria = df_diario['Precipitacao'].mean() if dias_totais > 0 else 0.0
 
-if len(df_filtrado[df_filtrado['Precipitação'] > 0]) > 0:
+if len(df_filtrado[df_filtrado['Precipitacao'] > 0]) > 0:
     pico_horario_idx = df_filtrado['Precipitacao'].idxmax()
     pico_hora = df_filtrado.loc[pico_horario_idx, 'Hora']
     pico_valor_hora = df_filtrado.loc[pico_horario_idx, 'Precipitacao']
@@ -99,8 +99,8 @@ else:
     pico_valor_hora = 0.0
 
 if len(df_diario) > 0:
-    max_chuva_linha = df_diario.loc[df_diario['Precipitação'].idxmax()]
-    max_chuva_valor = max_chuva_linha['Precipitação']
+    max_chuva_linha = df_diario.loc[df_diario['Precipitacao'].idxmax()]
+    max_chuva_valor = max_chuva_linha['Precipitacao']
     max_chuva_data = max_chuva_linha['Data'].strftime('%d/%m/%Y')
 else:
     max_chuva_valor = 0.0
@@ -141,8 +141,8 @@ with col1:
     st.info(f"**📌 INFORMAÇÕES DO PERÍODO**\n\nEste painel exibe dados dinâmicos do intervalo selecionado no filtro lateral. \n\n**Período atual:** {sufixo_titulo}.\n\nToda a análise de médias e distribuições de intensidade é recalculada automaticamente ao alterar as datas.")
 
 with col2:
-    df_hora = df_filtrado.groupby('Hora')['Precipitação'].mean().reset_index()
-    fig_hora = px.line(df_hora, x='Hora', y='Precipitação', markers=True,
+    df_hora = df_filtrado.groupby('Hora')['Precipitacao'].mean().reset_index()
+    fig_hora = px.line(df_hora, x='Hora', y='Precipitacao', markers=True,
                        labels={'Hora': 'Hora do dia', 'Precipitacao': 'mm/h'},
                        title='Comportamento da Média Horária de Precipitação')
     fig_hora.update_traces(line_color='#1f4e79', marker=dict(size=6, color='#2980b9'))
@@ -155,12 +155,12 @@ st.markdown("---")
 col4, col6 = st.columns([1, 1])
 
 with col4:
-    df_mes = df_filtrado.groupby('Mes')['Precipitação'].sum().reset_index()
+    df_mes = df_filtrado.groupby('Mes')['Precipitacao'].sum().reset_index()
     ordem_meses = {'Jan': 0, 'Fev': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5}
     df_mes['Ordem'] = df_mes['Mes'].map(ordem_meses).fillna(99)
     df_mes = df_mes.sort_values('Ordem')
     
-    fig_mes = px.bar(df_mes, x='Mes', y='Precipitação', text_auto='.1f', title='Precipitação Acumulada por Mês')
+    fig_mes = px.bar(df_mes, x='Mes', y='Precipitacao', text_auto='.1f', title='Precipitação Acumulada por Mês')
     fig_mes.update_traces(marker_color='#1f4e79', textposition='outside')
     fig_mes.update_layout(height=250, plot_bgcolor='rgba(0,0,0,0)', margin=dict(l=20, r=20, t=40, b=20))
     st.plotly_chart(fig_mes, use_container_width=True)
