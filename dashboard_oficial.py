@@ -84,6 +84,7 @@ df_diario = df_filtrado.groupby('Data')['Precipitacao'].sum().reset_index()
 df_diario['Data'] = pd.to_datetime(df_diario['Data'])
 janela_media = 7 if len(df_diario) >= 7 else max(1, len(df_diario))
 df_diario['MediaMovel'] = df_diario['Precipitacao'].rolling(window=janela_media, min_periods=1).mean()
+
 total_chuva = df_filtrado['Precipitacao'].sum()
 dias_totais = len(df_diario)
 dias_com_chuva = len(df_diario[df_diario['Precipitacao'] > 0])
@@ -110,8 +111,8 @@ else:
 # 5. MONTAGEM VISUAL DO LAYOUT DO DASHBOARD
 # ==========================================
 
-# --- ADICIONANDO A LOGO DA EMPRESA (Caminho na Nuvem) ---
-caminho_completo_logo = "logo_embrapa.png"
+# --- ADICIONANDO A LOGO DA EMPRESA (Caminho Local Exato) ---
+caminho_completo_logo = r"C:logo_embrapa.png"
 
 col_logo, _ = st.columns([1, 4])
 with col_logo:
@@ -193,14 +194,14 @@ df_cal = df_cal.sort_values(['DiaSemana', 'Texto Semana'])
 fig_cal = px.bar(
     df_cal,
     x='Dia da Semana',
-    y='Precipitação',
+    y='Precipitacao',
     color='Texto Semana',
     barmode='group',
     color_continuous_scale=None,
     color_discrete_sequence=px.colors.sample_colorscale("Blues", len(df_cal['Texto Semana'].unique()), low=0.4, high=1.0),
     category_orders={"Dia da Semana": ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'],
                      "Texto Semana": sorted(df_cal['Texto Semana'].unique())},
-    labels={'Precipitação': 'Chuva (mm)', 'Texto Semana': 'Período'}
+    labels={'Precipitacao': 'Chuva (mm)', 'Texto Semana': 'Período'}
 )
 
 fig_cal.update_layout(
@@ -218,7 +219,7 @@ st.markdown("---")
 # --- BLOCO 5: SÉRIE TEMPORAL DIÁRIA ---
 st.markdown(f"#### 📈 Série Temporal Diária — Precipitação Pluviométrica")
 fig_temporal = go.Figure()
-fig_temporal.add_trace(go.Scatter(x=df_diario['Data'], y=df_diario['Precipitação'],
+fig_temporal.add_trace(go.Scatter(x=df_diario['Data'], y=df_diario['Precipitacao'],
                     mode='lines+markers', name='Precipitação Diária', line=dict(color='#1f4e79', width=2)))
 fig_temporal.add_trace(go.Scatter(x=df_diario['Data'], y=df_diario['MediaMovel'],
                     mode='lines', name='Média Móvel (7 dias)', line=dict(color='#3498db', width=1.5, dash='dash')))
