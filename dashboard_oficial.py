@@ -178,7 +178,7 @@ st.markdown("---")
 # --- BLOCO 4: CALENDÁRIO DE DISTRIBUIÇÃO SEMANAL (VERSÃO BARRAS AGRUPADAS CLEAN) ---
 st.markdown("#### 🗓️ Calendário de Distribuição Semanal (mm) — Comparativo por Dia")
 
-df_cal = df_filtrado.groupby(['Semana Ano', 'DiaSemana'])['Precipitação'].sum().reset_index()
+df_cal = df_filtrado.groupby(['Semana Ano', 'DiaSemana'])['Precipitacao'].sum().reset_index()
 
 ordem_dias = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 df_cal['DiaSemana'] = pd.Categorical(df_cal['DiaSemana'], categories=ordem_dias, ordered=True)
