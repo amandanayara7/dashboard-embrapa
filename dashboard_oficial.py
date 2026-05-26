@@ -83,15 +83,15 @@ else:
 df_diario = df_filtrado.groupby('Data')['Precipitacao'].sum().reset_index()
 df_diario['Data'] = pd.to_datetime(df_diario['Data'])
 janela_media = 7 if len(df_diario) >= 7 else max(1, len(df_diario))
-df_diario['MediaMovel'] = df_diario['Precipitacao'].rolling(window=janela_media, min_periods=1).mean()
+df_diario['MediaMovel'] = df_diario['Precipitação'].rolling(window=janela_media, min_periods=1).mean()
 
-total_chuva = df_filtrado['Precipitacao'].sum()
+total_chuva = df_filtrado['Precipitação'].sum()
 dias_totais = len(df_diario)
-dias_com_chuva = len(df_diario[df_diario['Precipitacao'] > 0])
+dias_com_chuva = len(df_diario[df_diario['Precipitação'] > 0])
 dias_secos = dias_totais - dias_com_chuva
-media_diaria = df_diario['Precipitacao'].mean() if dias_totais > 0 else 0.0
+media_diaria = df_diario['Precipitação'].mean() if dias_totais > 0 else 0.0
 
-if len(df_filtrado[df_filtrado['Precipitacao'] > 0]) > 0:
+if len(df_filtrado[df_filtrado['Precipitação'] > 0]) > 0:
     pico_horario_idx = df_filtrado['Precipitacao'].idxmax()
     pico_hora = df_filtrado.loc[pico_horario_idx, 'Hora']
     pico_valor_hora = df_filtrado.loc[pico_horario_idx, 'Precipitacao']
@@ -100,8 +100,8 @@ else:
     pico_valor_hora = 0.0
 
 if len(df_diario) > 0:
-    max_chuva_linha = df_diario.loc[df_diario['Precipitacao'].idxmax()]
-    max_chuva_valor = max_chuva_linha['Precipitacao']
+    max_chuva_linha = df_diario.loc[df_diario['Precipitação'].idxmax()]
+    max_chuva_valor = max_chuva_linha['Precipitação']
     max_chuva_data = max_chuva_linha['Data'].strftime('%d/%m/%Y')
 else:
     max_chuva_valor = 0.0
@@ -142,8 +142,8 @@ with col1:
     st.info(f"**📌 INFORMAÇÕES DO PERÍODO**\n\nEste painel exibe dados dinâmicos do intervalo selecionado no filtro lateral. \n\n**Período atual:** {sufixo_titulo}.\n\nToda a análise de médias e distribuições de intensidade é recalculada automaticamente ao alterar as datas.")
 
 with col2:
-    df_hora = df_filtrado.groupby('Hora')['Precipitacao'].mean().reset_index()
-    fig_hora = px.line(df_hora, x='Hora', y='Precipitacao', markers=True,
+    df_hora = df_filtrado.groupby('Hora')['Precipitação'].mean().reset_index()
+    fig_hora = px.line(df_hora, x='Hora', y='Precipitação', markers=True,
                        labels={'Hora': 'Hora do dia', 'Precipitacao': 'mm/h'},
                        title='Comportamento da Média Horária de Precipitação')
     fig_hora.update_traces(line_color='#1f4e79', marker=dict(size=6, color='#2980b9'))
@@ -156,12 +156,12 @@ st.markdown("---")
 col4, col6 = st.columns([1, 1])
 
 with col4:
-    df_mes = df_filtrado.groupby('Mes')['Precipitacao'].sum().reset_index()
+    df_mes = df_filtrado.groupby('Mes')['Precipitação'].sum().reset_index()
     ordem_meses = {'Jan': 0, 'Fev': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5}
     df_mes['Ordem'] = df_mes['Mes'].map(ordem_meses).fillna(99)
     df_mes = df_mes.sort_values('Ordem')
     
-    fig_mes = px.bar(df_mes, x='Mes', y='Precipitacao', text_auto='.1f', title='Precipitação Acumulada por Mês')
+    fig_mes = px.bar(df_mes, x='Mes', y='Precipitação', text_auto='.1f', title='Precipitação Acumulada por Mês')
     fig_mes.update_traces(marker_color='#1f4e79', textposition='outside')
     fig_mes.update_layout(height=250, plot_bgcolor='rgba(0,0,0,0)', margin=dict(l=20, r=20, t=40, b=20))
     st.plotly_chart(fig_mes, use_container_width=True)
@@ -179,7 +179,7 @@ st.markdown("---")
 # --- BLOCO 4: CALENDÁRIO DE DISTRIBUIÇÃO SEMANAL (VERSÃO BARRAS AGRUPADAS CLEAN) ---
 st.markdown("#### 🗓️ Calendário de Distribuição Semanal (mm) — Comparativo por Dia")
 
-df_cal = df_filtrado.groupby(['Semana Ano', 'DiaSemana'])['Precipitacao'].sum().reset_index()
+df_cal = df_filtrado.groupby(['Semana Ano', 'DiaSemana'])['Precipitação'].sum().reset_index()
 
 ordem_dias = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 df_cal['DiaSemana'] = pd.Categorical(df_cal['DiaSemana'], categories=ordem_dias, ordered=True)
@@ -194,14 +194,14 @@ df_cal = df_cal.sort_values(['DiaSemana', 'Texto Semana'])
 fig_cal = px.bar(
     df_cal,
     x='Dia da Semana',
-    y='Precipitacao',
+    y='Precipitação',
     color='Texto Semana',
     barmode='group',
     color_continuous_scale=None,
     color_discrete_sequence=px.colors.sample_colorscale("Blues", len(df_cal['Texto Semana'].unique()), low=0.4, high=1.0),
     category_orders={"Dia da Semana": ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'],
                      "Texto Semana": sorted(df_cal['Texto Semana'].unique())},
-    labels={'Precipitacao': 'Chuva (mm)', 'Texto Semana': 'Período'}
+    labels={'Precipitação': 'Chuva (mm)', 'Texto Semana': 'Período'}
 )
 
 fig_cal.update_layout(
@@ -219,7 +219,7 @@ st.markdown("---")
 # --- BLOCO 5: SÉRIE TEMPORAL DIÁRIA ---
 st.markdown(f"#### 📈 Série Temporal Diária — Precipitação Pluviométrica")
 fig_temporal = go.Figure()
-fig_temporal.add_trace(go.Scatter(x=df_diario['Data'], y=df_diario['Precipitacao'],
+fig_temporal.add_trace(go.Scatter(x=df_diario['Data'], y=df_diario['Precipitação'],
                     mode='lines+markers', name='Precipitação Diária', line=dict(color='#1f4e79', width=2)))
 fig_temporal.add_trace(go.Scatter(x=df_diario['Data'], y=df_diario['MediaMovel'],
                     mode='lines', name='Média Móvel (7 dias)', line=dict(color='#3498db', width=1.5, dash='dash')))
