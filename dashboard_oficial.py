@@ -111,8 +111,8 @@ else:
 # 5. MONTAGEM VISUAL DO LAYOUT DO DASHBOARD
 # ==========================================
 
-# --- ADICIONANDO A LOGO DA EMPRESA (Caminho Local Exato) ---
-caminho_completo_logo = r"C:logo_embrapa.png"
+# --- ADICIONANDO A LOGO DA EMPRESA (Caminho na Nuvem) ---
+caminho_completo_logo = "logo_embrapa.png"
 
 col_logo, _ = st.columns([1, 4])
 with col_logo:
