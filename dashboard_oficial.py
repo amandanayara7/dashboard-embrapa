@@ -86,9 +86,9 @@ janela_media = 7 if len(df_diario) >= 7 else max(1, len(df_diario))
 df_diario['MediaMovel'] = df_diario['Precipitacao'].rolling(window=janela_media, min_periods=1).mean()
 total_chuva = df_filtrado['Precipitacao'].sum()
 dias_totais = len(df_diario)
-dias_com_chuva = len(df_diario[df_diario['Precipitação'] > 0])
+dias_com_chuva = len(df_diario[df_diario['Precipitacao'] > 0])
 dias_secos = dias_totais - dias_com_chuva
-media_diaria = df_diario['Precipitação'].mean() if dias_totais > 0 else 0.0
+media_diaria = df_diario['Precipitacao'].mean() if dias_totais > 0 else 0.0
 
 if len(df_filtrado[df_filtrado['Precipitação'] > 0]) > 0:
     pico_horario_idx = df_filtrado['Precipitacao'].idxmax()
